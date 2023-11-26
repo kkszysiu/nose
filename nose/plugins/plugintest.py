@@ -100,9 +100,9 @@ import sys
 from warnings import warn
 
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 __all__ = ['PluginTester', 'run']
 
@@ -135,7 +135,7 @@ class MultiProcessFile(object):
         if getpid() != self.__master:
             return
 
-        from Queue import Empty
+        from queue import Empty
         from collections import defaultdict
         cache = defaultdict(str)
         while True:
@@ -404,7 +404,7 @@ def run(*arg, **kw):
             sys.stderr = stderr
             sys.stdout = stdout
     out = buffer.getvalue()
-    print munge_nose_output_for_doctest(out)
+    print(munge_nose_output_for_doctest(out))
 
 
 def run_buffered(*arg, **kw):
