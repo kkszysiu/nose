@@ -40,7 +40,7 @@ class TestCoveragePlugin(PluginTester, unittest.TestCase):
         super(TestCoveragePlugin, self).setUp()
 
     def runTest(self):
-        print(self.output)
+        print((self.output))
         self.assertTrue(
                 # Coverage < 4.0
                 ("blah        4      3    25%   1" in self.output) or

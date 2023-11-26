@@ -2,7 +2,7 @@ import os
 import sys
 import unittest
 import warnings
-from cStringIO import StringIO
+from io import StringIO
 from nose.result import _TextTestResult
 here = os.path.dirname(__file__)
 support = os.path.join(here, 'support')
