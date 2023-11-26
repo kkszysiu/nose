@@ -148,7 +148,7 @@ else:
 
             ei_cmd = self.get_finalized_command("egg_info")
             argv = ['nosetests', '--where', ei_cmd.egg_base] 
-            for (option_name, cmd_name) in self.option_to_cmds.items():
+            for (option_name, cmd_name) in list(self.option_to_cmds.items()):
                 if option_name in option_blacklist:
                     continue
                 value = getattr(self, option_name)
