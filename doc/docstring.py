@@ -9,7 +9,7 @@ def docstring_directive(dirname, arguments, options, content, lineno,
     obj = resolve_name(obj_name)
     rst = ViewList()
     rst.append(obj.__doc__, '<docstring>')
-    print "CALLED", obj_name, obj, rst
+    print("CALLED", obj_name, obj, rst)
     node = nodes.section()
     surrounding_title_styles = state.memo.title_styles
     surrounding_section_level = state.memo.section_level
