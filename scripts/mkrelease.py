@@ -4,9 +4,9 @@
 # create and upload a release
 import os
 import sys
-import urllib
-from urllib2 import urlopen
-from commands import getstatusoutput
+import urllib.request, urllib.parse, urllib.error
+from urllib.request import urlopen
+from subprocess import getstatusoutput
 
 success = 0
 
@@ -21,7 +21,7 @@ if SIMULATE:
 
 
 def runcmd(cmd):
-    print cmd
+    print(cmd)
     if not SIMULATE:
         (status,output) = getstatusoutput(cmd)
         if status != success:
@@ -31,7 +31,7 @@ def runcmd(cmd):
 
 
 def cd(dir):
-    print "cd %s" % dir
+    print("cd %s" % dir)
     if not SIMULATE:
         os.chdir(dir)
 
@@ -63,17 +63,17 @@ def main():
     runcmd('python setup.py register')
 
     rtd = 'http://readthedocs.org/build/1137'
-    print 'POST %s' % rtd
+    print('POST %s' % rtd)
     if not SIMULATE:
         u = urlopen(rtd,
                     # send dummy params to force a POST
-                    urllib.urlencode({'build': 1}))
-        print u.read()
+                    urllib.parse.urlencode({'build': 1}))
+        print(u.read())
         u.close()
 
-    print '*'
-    print "* it's live! Now you can show/hide old releases on PyPI"
-    print '*'
+    print('*')
+    print("* it's live! Now you can show/hide old releases on PyPI")
+    print('*')
 
 if __name__ == '__main__':
     main()

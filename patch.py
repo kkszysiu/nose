@@ -26,7 +26,7 @@ import sys
 
 try:
   # cStringIO doesn't support unicode in 2.5
-  from StringIO import StringIO
+  from io import StringIO
 except ImportError:
   # StringIO has been renamed to 'io' in 3.x
   from io import StringIO
@@ -48,7 +48,7 @@ else:
     # Python 3.x has changed iter.next() to be next(iter) instead, so for
     # backwards compatibility, we'll just define a next() function under 2.x
     def next(iter):
-        return iter.next()
+        return iter.__next__()
 
 
 #------------------------------------------------
