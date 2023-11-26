@@ -151,7 +151,7 @@ def func_lineno(func):
         return func.compat_co_firstlineno
     except AttributeError:
         try:
-            return func.func_code.co_firstlineno
+            return func.__code__.co_firstlineno
         except AttributeError:
             return -1
 
@@ -400,7 +400,7 @@ def test_address(test):
         file = getattr(test, '__file__', None)
         module = getattr(test, '__name__', None)
         return (src(file), module, call)
-    if t == types.FunctionType or issubclass(t, type) or t == types.ClassType:
+    if t == types.FunctionType or issubclass(t, type) or t == type:
         module = getattr(test, '__module__', None)
         if module is not None:
             m = sys.modules[module]
@@ -410,7 +410,7 @@ def test_address(test):
         call = getattr(test, '__name__', None)
         return (src(file), module, call)
     if t == types.MethodType:
-        cls_adr = test_address(test.im_class)
+        cls_adr = test_address(test.__self__.__class__)
         return (src(cls_adr[0]), cls_adr[1],
                 "%s.%s" % (cls_adr[2], test.__name__))
     # handle unittest.TestCase instances
@@ -552,7 +552,7 @@ class odict(dict):
             self._keys.append(key)
 
     def __str__(self):
-        return "{%s}" % ', '.join(["%r: %r" % (k, v) for k, v in self.items()])
+        return "{%s}" % ', '.join(["%r: %r" % (k, v) for k, v in list(self.items())])
 
     def clear(self):
         super(odict, self).clear()
@@ -564,7 +564,7 @@ class odict(dict):
         return d
 
     def items(self):
-        return zip(self._keys, self.values())
+        return list(zip(self._keys, list(self.values())))
 
     def keys(self):
         return self._keys[:]
@@ -577,12 +577,12 @@ class odict(dict):
 
     def update(self, dict):
         super(odict, self).update(dict)
-        for key in dict.keys():
+        for key in list(dict.keys()):
             if key not in self._keys:
                 self._keys.append(key)
 
     def values(self):
-        return map(self.get, self._keys)
+        return list(map(self.get, self._keys))
 
 
 def transplant_func(func, module):
@@ -654,7 +654,7 @@ def safe_str(val, encoding='utf-8'):
         if isinstance(val, Exception):
             return ' '.join([safe_str(arg, encoding)
                              for arg in val])
-        return unicode(val).encode(encoding)
+        return str(val).encode(encoding)
 
 
 def is_executable(file):
