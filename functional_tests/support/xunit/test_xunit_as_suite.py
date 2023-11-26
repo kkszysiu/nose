@@ -15,7 +15,7 @@ class TestForXunit(unittest.TestCase):
         raise TypeError("oops, wrong type")
     
     def test_non_ascii_error(self):
-        raise Exception(u"日本")
+        raise Exception("日本")
     
     def test_output(self):
         sys.stdout.write("test-generated output\n")
