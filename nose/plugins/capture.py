@@ -15,7 +15,7 @@ import sys
 from nose.plugins.base import Plugin
 from nose.pyversion import exc_to_unicode, force_unicode
 from nose.util import ln
-from StringIO import StringIO
+from io import StringIO
 
 
 log = logging.getLogger(__name__)
@@ -89,8 +89,8 @@ class Capture(Plugin):
     def addCaptureToErr(self, ev, output):
         ev = exc_to_unicode(ev)
         output = force_unicode(output)
-        return u'\n'.join([ev, ln(u'>> begin captured stdout <<'),
-                           output, ln(u'>> end captured stdout <<')])
+        return '\n'.join([ev, ln('>> begin captured stdout <<'),
+                           output, ln('>> end captured stdout <<')])
 
     def start(self):
         self.stdout.append(sys.stdout)
