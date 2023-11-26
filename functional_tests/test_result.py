@@ -1,7 +1,7 @@
 import os
 import sys
 import unittest
-from cStringIO import StringIO
+from io import StringIO
 from nose.config import Config
 from nose.core import TestProgram
 from nose.plugins.manager import PluginManager
@@ -23,8 +23,8 @@ class TestResultSummary(unittest.TestCase):
         TestProgram(argv=['t', '--with-todo', pkpath],
                     config=config, exit=False)
         out = stream.getvalue()
-        print out
-        self.assert_('FAILED (TODO=1)' in out)
+        print(out)
+        self.assertTrue('FAILED (TODO=1)' in out)
 
 
 if __name__ == '__main__':

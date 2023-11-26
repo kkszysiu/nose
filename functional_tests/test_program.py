@@ -1,6 +1,6 @@
 import os
 import unittest
-from cStringIO import StringIO
+from io import StringIO
 from nose import SkipTest
 from nose.core import TestProgram
 from nose.config import Config
@@ -35,7 +35,7 @@ class TestTestProgram(unittest.TestCase):
                            config=Config(),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 0,
                          "Expected to run 0 tests, ran %s" % res.testsRun)
         assert res.wasSuccessful()
@@ -55,7 +55,7 @@ class TestTestProgram(unittest.TestCase):
                            config=Config(),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 6,
                          "Expected to run 6 tests, ran %s" % res.testsRun)
         assert res.wasSuccessful()
@@ -84,7 +84,7 @@ class TestTestProgram(unittest.TestCase):
                            config=Config(),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 2,
                          "Expected to run 2 tests, ran %s" % res.testsRun)
         assert res.wasSuccessful()
@@ -109,9 +109,9 @@ class TestTestProgram(unittest.TestCase):
                            config=Config(stream=stream),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
-        print "-----"
-        print repr(res)
+        print(stream.getvalue())
+        print("-----")
+        print(repr(res))
 
         self.assertEqual(res.testsRun, 4,
                          "Expected to run 4 tests, ran %s" % (res.testsRun,))
@@ -147,7 +147,7 @@ class TestTestProgram(unittest.TestCase):
                                          plugins=DefaultPluginManager()),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 0) # error is in setup
         assert not res.wasSuccessful()
         assert res.errors
@@ -164,7 +164,7 @@ class TestTestProgram(unittest.TestCase):
                            config=Config(),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 8)
 
     def test_illegal_packages_not_selected(self):
@@ -178,7 +178,7 @@ class TestTestProgram(unittest.TestCase):
                                          plugins=DefaultPluginManager()),
                            exit=False)
         res = runner.result
-        print stream.getvalue()
+        print(stream.getvalue())
         self.assertEqual(res.testsRun, 0)
         assert res.wasSuccessful()
         assert not res.errors
