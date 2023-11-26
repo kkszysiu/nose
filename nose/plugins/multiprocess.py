@@ -115,12 +115,12 @@ try:
     from unittest.runner import _WritelnDecorator
 except ImportError:
     from unittest import _WritelnDecorator
-from Queue import Empty
+from queue import Empty
 from warnings import warn
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    import StringIO
+    import io
 
 # this is a list of plugin classes that will be checked for and created inside 
 # each worker process
@@ -478,7 +478,7 @@ class MultiProcessTestRunner(TextTestRunner):
                                 self.config.multiprocess_timeout-timeprocessing)
             log.debug("Completed %s tasks (%s remain)", len(completed), len(tasks))
 
-        except (KeyboardInterrupt, SystemExit), e:
+        except (KeyboardInterrupt, SystemExit) as e:
             log.info('parent received ctrl-c when waiting for test results')
             thrownError = e
             #resultQueue.get(False)
@@ -633,7 +633,7 @@ class MultiProcessTestRunner(TextTestRunner):
         result.testsRun += testsRun
         result.failures.extend(failures)
         result.errors.extend(errors)
-        for key, (storage, label, isfail) in errorClasses.items():
+        for key, (storage, label, isfail) in list(errorClasses.items()):
             if key not in result.errorClasses:
                 # Ordinarily storage is result attribute
                 # but it's only processed through the errorClasses
@@ -686,7 +686,7 @@ def __runner(ix, testQueue, resultQueue, currentaddr, currentstart,
         failures = [(TestLet(c), err) for c, err in result.failures]
         errors = [(TestLet(c), err) for c, err in result.errors]
         errorClasses = {}
-        for key, (storage, label, isfail) in result.errorClasses.items():
+        for key, (storage, label, isfail) in list(result.errorClasses.items()):
             errorClasses[key] = ([(TestLet(c), err) for c, err in storage],
                                  label, isfail)
         return (
@@ -715,7 +715,7 @@ def __runner(ix, testQueue, resultQueue, currentaddr, currentstart,
             test(result)
             currentaddr.value = bytes_('')
             resultQueue.put((ix, test_addr, test.tasks, batch(result)))
-        except KeyboardInterrupt, e: #TimedOutException:
+        except KeyboardInterrupt as e: #TimedOutException:
             timeout = isinstance(e, TimedOutException)
             if timeout:
                 keyboardCaught.set()
@@ -810,7 +810,7 @@ class NoSharedFixtureContextSuite(ContextSuite):
                 #log.debug('running test %s in suite %s', test, self);
                 try:
                     test(orig)
-                except KeyboardInterrupt, e:
+                except KeyboardInterrupt as e:
                     timeout = isinstance(e, TimedOutException)
                     if timeout:
                         msg = 'Timeout when running test %s in suite %s'

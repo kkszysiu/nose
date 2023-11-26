@@ -60,13 +60,13 @@ from nose.plugins.base import IPluginInterface
 from nose.pyversion import sort_list
 
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except:
     import pickle
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except:
-    from StringIO import StringIO
+    from io import StringIO
 
 
 __all__ = ['DefaultPluginManager', 'PluginManager', 'EntryPointPluginManager',
@@ -387,7 +387,7 @@ class EntryPointPluginManager(PluginManager):
                     plugcls = ep.load()
                 except KeyboardInterrupt:
                     raise
-                except Exception, e:
+                except Exception as e:
                     # never want a plugin load to kill the test run
                     # but we can't log here because the logger is not yet
                     # configured
