@@ -4,7 +4,7 @@ from nose import main
 import sys
 import re
 try:
-    from StringIO import StringIO
+    from io import StringIO
 except ImportError:
     from io import BytesIO as StringIO
 

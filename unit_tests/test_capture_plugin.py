@@ -51,14 +51,14 @@ class TestCapturePlugin(unittest.TestCase):
     def test_captures_stdout(self):
         c = Capture()
         c.start()
-        print "Hello"
+        print("Hello")
         c.end()
         self.assertEqual(c.buffer, "Hello\n")
         
     def test_captures_nonascii_stdout(self):
         c = Capture()
         c.start()
-        print "test 日本"
+        print("test 日本")
         c.end()
         self.assertEqual(c.buffer, "test 日本\n")
 
@@ -69,7 +69,7 @@ class TestCapturePlugin(unittest.TestCase):
         c = Capture()
         c.start()
         try:
-            print "Oh my!"
+            print("Oh my!")
             raise Exception("boom")
         except:
             err = sys.exc_info()
@@ -90,8 +90,8 @@ class TestCapturePlugin(unittest.TestCase):
         c = Capture()
         c.start()
         try:
-            print "debug 日本"
-            raise AssertionError(u'response does not contain 名')
+            print("debug 日本")
+            raise AssertionError('response does not contain 名')
         except:
             err = sys.exc_info()
         formatted = c.formatError(d, err)

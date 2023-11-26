@@ -2,7 +2,7 @@ import unittest
 from nose.config import Config
 from nose.plugins.skip import Skip, SkipTest
 from nose.result import TextTestResult
-from StringIO import StringIO
+from io import StringIO
 from nose.result import _TextTestResult
 from optparse import OptionParser
 try:
@@ -85,7 +85,7 @@ class TestSkipPlugin(unittest.TestCase):
 
         res.printErrors()
         out = stream.getvalue()
-        print out
+        print(out)
         assert out
         assert out.strip() == "S"
         assert res.wasSuccessful()
@@ -107,7 +107,7 @@ class TestSkipPlugin(unittest.TestCase):
 
         res.printErrors()
         out = stream.getvalue()
-        print out
+        print(out)
         assert out
 
         assert ' ... SKIP' in out
