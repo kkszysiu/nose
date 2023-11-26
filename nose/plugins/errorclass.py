@@ -103,7 +103,7 @@ class MetaErrorClass(type):
     """
     def __init__(self, name, bases, attr):
         errorClasses = []
-        for name, detail in attr.items():
+        for name, detail in list(attr.items()):
             if isinstance(detail, ErrorClass):
                 attr.pop(name)
                 for cls in detail:
@@ -127,12 +127,11 @@ class ErrorClass(object):
         return iter(self.errorClasses)
 
 
-class ErrorClassPlugin(Plugin):
+class ErrorClassPlugin(Plugin, metaclass=MetaErrorClass):
     """
     Base class for ErrorClass plugins. Subclass this class and declare the
     exceptions that you wish to handle as attributes of the subclass.
     """
-    __metaclass__ = MetaErrorClass
     score = 1000
     errorClasses = ()
 
@@ -141,7 +140,7 @@ class ErrorClassPlugin(Plugin):
         if not isclass(err_cls):
             return
         classes = [e[0] for e in self.errorClasses]
-        if filter(lambda c: issubclass(err_cls, c), classes):
+        if [c for c in classes if issubclass(err_cls, c)]:
             return True
 
     def prepareTestResult(self, result):

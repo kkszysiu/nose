@@ -13,7 +13,7 @@ variable.
 import logging
 import re
 import sys
-import StringIO
+import io
 from nose.plugins.base import Plugin
 from nose.util import src, tolist
 
@@ -161,7 +161,7 @@ class Coverage(Plugin):
             self.coverInstance.exclude('#pragma[: ]+[nN][oO] [cC][oO][vV][eE][rR]')
 
             log.debug("Coverage begin")
-            self.skipModules = sys.modules.keys()[:]
+            self.skipModules = list(sys.modules.keys())[:]
             if self.coverErase:
                 log.debug("Clearing previously collected coverage statistics")
                 self.coverInstance.combine()
@@ -198,7 +198,7 @@ class Coverage(Plugin):
         self.coverInstance.combine()
         self.coverInstance.save()
         modules = [module
-                   for name, module in sys.modules.items()
+                   for name, module in list(sys.modules.items())
                    if self.wantModuleCoverage(name, module)]
         log.debug("Coverage report will cover modules: %s", modules)
         if self.coverPrint:
@@ -209,19 +209,19 @@ class Coverage(Plugin):
             log.debug("Generating HTML coverage report")
             try:
                 self.coverInstance.html_report(modules, self.coverHtmlDir)
-            except coverage.misc.CoverageException, e:
+            except coverage.misc.CoverageException as e:
                 log.warning("Failed to generate HTML report: %s" % str(e))
 
         if self.coverXmlFile:
             log.debug("Generating XML coverage report")
             try:
                 self.coverInstance.xml_report(modules, self.coverXmlFile)
-            except coverage.misc.CoverageException, e:
+            except coverage.misc.CoverageException as e:
                 log.warning("Failed to generate XML report: %s" % str(e))
 
         # make sure we have minimum required coverage
         if self.coverMinPercentage:
-            f = StringIO.StringIO()
+            f = io.StringIO()
             self.coverInstance.report(modules, file=f)
 
             multiPackageRe = (r'-------\s\w+\s+\d+\s+\d+(?:\s+\d+\s+\d+)?'
