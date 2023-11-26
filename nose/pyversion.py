@@ -16,12 +16,12 @@ __all__ = ['make_instancemethod', 'cmp_to_key', 'sort_list', 'ClassType',
 # In Python 3.x, all strings are unicode (the call to 'unicode()' in the 2.x
 # source will be replaced with 'str()' when running 2to3, so this test will
 # then become true)
-UNICODE_STRINGS = (type(unicode()) == type(str()))
+UNICODE_STRINGS = (type(str()) == type(str()))
 
 if sys.version_info[:2] < (3, 0):
     def force_unicode(s, encoding='UTF-8'):
         try:
-            s = unicode(s)
+            s = str(s)
         except UnicodeDecodeError:
             s = str(s).decode(encoding, 'replace')
 
@@ -35,7 +35,7 @@ else:
 try:
     import new
     def make_instancemethod(function, instance):
-        return new.instancemethod(function.im_func, instance,
+        return new.instancemethod(function.__func__, instance,
                                   instance.__class__)
 except ImportError:
     def make_instancemethod(function, instance):
@@ -73,8 +73,8 @@ else:
 # thus types.ClassType and types.TypeType don't exist anymore.  For
 # compatibility, we make sure they still work.
 if hasattr(types, 'ClassType'):
-    ClassType = types.ClassType
-    TypeType = types.TypeType
+    ClassType = type
+    TypeType = type
 else:
     ClassType = type
     TypeType = type
@@ -90,7 +90,7 @@ class UnboundMethod:
         self._func = func
         self.__self__ = UnboundSelf(cls)
         if sys.version_info < (3, 0):
-            self.im_class = cls
+            self.__self__.__class__ = cls
         self.__doc__ = getattr(func, '__doc__', None)
 
     def address(self):
@@ -161,7 +161,7 @@ else:
 
     def isgenerator(func):
         try:
-            return func.func_code.co_flags & CO_GENERATOR != 0
+            return func.__code__.co_flags & CO_GENERATOR != 0
         except AttributeError:
             return False
 
@@ -187,8 +187,8 @@ if sys.version_info[:2] < (3, 0):
                 msg = force_unicode(msg, encoding=encoding)
                 clsname = force_unicode(ev.__class__.__name__,
                         encoding=encoding)
-                ev = u'%s: %s' % (clsname, msg)
-        elif not isinstance(ev, unicode):
+                ev = '%s: %s' % (clsname, msg)
+        elif not isinstance(ev, str):
             ev = repr(ev)
 
         return force_unicode(ev, encoding=encoding)
