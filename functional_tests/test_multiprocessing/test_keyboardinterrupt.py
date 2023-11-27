@@ -64,7 +64,7 @@ def get_log_content(logfile):
 
 def test_keyboardinterrupt():
     process, logfile, _ = keyboardinterrupt('keyboardinterrupt.py')
-    stdout, stderr = [s.decode('utf-8') for s in process.communicate(None)]
+    stdout, stderr = (s.decode('utf-8') for s in process.communicate(None))
     log = get_log_content(logfile)
     print(stderr)
     print('----')
@@ -86,7 +86,7 @@ def test_keyboardinterrupt_twice():
     process, logfile, killfile = keyboardinterrupt('keyboardinterrupt_twice.py')
     waitForKillFile(killfile)
     os.killpg(process.pid, signal.SIGINT)
-    stdout, stderr = [s.decode('utf-8') for s in process.communicate(None)]
+    stdout, stderr = (s.decode('utf-8') for s in process.communicate(None))
     log = get_log_content(logfile)
     print(stderr)
     print('----')

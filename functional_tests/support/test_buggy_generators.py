@@ -13,7 +13,7 @@ def test_ok():
     pass
 
 
-class TestBuggyGenerators(object):
+class TestBuggyGenerators:
 
     def test_generator_fails_before_yield(self):
         a = 1 // 0

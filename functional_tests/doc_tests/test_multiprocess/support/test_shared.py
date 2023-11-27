@@ -19,7 +19,7 @@ def _clear():
 
 
 def logged():
-    flag_file = open(flag, 'r')
+    flag_file = open(flag)
     try:
         lines = [line for line in flag_file]
     finally:

@@ -1,2 +1,2 @@
 def cat(a, b):
-    return "%s%s" % (a, b)
+    return "{}{}".format(a, b)

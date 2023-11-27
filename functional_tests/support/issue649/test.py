@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import unittest
 
 class TestUnicodeInAssertion(unittest.TestCase):

@@ -1,4 +1,4 @@
-class TestFunctionalTest(object):
+class TestFunctionalTest:
     counter = 0
     @classmethod
     def setup_class(cls):

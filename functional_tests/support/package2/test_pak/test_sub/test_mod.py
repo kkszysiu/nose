@@ -26,7 +26,7 @@ class TestMaths:
         
     def test_div(self):
         state.append('test_pak.test_sub.test_mod.TestMaths.test_div')
-        assert maths.div(2, 1) == 2, "%s != %s" % (maths.div(2, 1), 2)
+        assert maths.div(2, 1) == 2, "{} != {}".format(maths.div(2, 1), 2)
 
     def test_two_two(self):
         state.append('test_pak.test_sub.test_mod.TestMaths.test_two_two')

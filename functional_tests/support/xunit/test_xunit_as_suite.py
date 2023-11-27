@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sys
 from nose.exc import SkipTest
 import unittest
