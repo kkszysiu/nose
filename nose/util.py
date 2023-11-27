@@ -72,12 +72,10 @@ def _ls_tree_lines(dir_path, skip_pattern,
                 for x in subtree:
                     yield branch_ind + x
     for name, is_dir in entries[:-1]:
-        for line in ls_entry(name, is_dir, indent, branch_indent):
-            yield line
+        yield from ls_entry(name, is_dir, indent, branch_indent)
     if entries:
         name, is_dir = entries[-1]
-        for line in ls_entry(name, is_dir, last_indent, last_branch_indent):
-            yield line
+        yield from ls_entry(name, is_dir, last_indent, last_branch_indent)
 
 
 def absdir(path):
@@ -287,7 +285,7 @@ def ln(label):
     """
     label_len = len(label) + 2
     chunk = (70 - label_len) // 2
-    out = '%s %s %s' % ('-' * chunk, label, '-' * chunk)
+    out = '{} {} {}'.format('-' * chunk, label, '-' * chunk)
     pad = 70 - len(out)
     if pad > 0:
         out = out + ('-' * pad)
@@ -412,7 +410,7 @@ def test_address(test):
     if t == types.MethodType:
         cls_adr = test_address(test.__self__.__class__)
         return (src(cls_adr[0]), cls_adr[1],
-                "%s.%s" % (cls_adr[2], test.__name__))
+                "{}.{}".format(cls_adr[2], test.__name__))
     # handle unittest.TestCase instances
     if isinstance(test, unittest.TestCase):
         if (hasattr(test, '_FunctionTestCase__testFunc') # pre 2.7
@@ -430,11 +428,11 @@ def test_address(test):
         except AttributeError:
             method_name = test._testMethodName
         return (src(cls_adr[0]), cls_adr[1],
-                "%s.%s" % (cls_adr[2], method_name))
+                "{}.{}".format(cls_adr[2], method_name))
     if (hasattr(test, '__class__') and
             test.__class__.__module__ not in ('__builtin__', 'builtins')):
         return test_address(test.__class__)
-    raise TypeError("I don't know what %s is (%s)" % (test, t))
+    raise TypeError("I don't know what {} is ({})".format(test, t))
 test_address.__test__ = False # do not collect
 
 
@@ -540,26 +538,26 @@ class odict(dict):
     """
     def __init__(self, *arg, **kw):
         self._keys = []
-        super(odict, self).__init__(*arg, **kw)
+        super().__init__(*arg, **kw)
 
     def __delitem__(self, key):
-        super(odict, self).__delitem__(key)
+        super().__delitem__(key)
         self._keys.remove(key)
 
     def __setitem__(self, key, item):
-        super(odict, self).__setitem__(key, item)
+        super().__setitem__(key, item)
         if key not in self._keys:
             self._keys.append(key)
 
     def __str__(self):
-        return "{%s}" % ', '.join(["%r: %r" % (k, v) for k, v in list(self.items())])
+        return "{%s}" % ', '.join(["{!r}: {!r}".format(k, v) for k, v in list(self.items())])
 
     def clear(self):
-        super(odict, self).clear()
+        super().clear()
         self._keys = []
 
     def copy(self):
-        d = super(odict, self).copy()
+        d = super().copy()
         d._keys = self._keys[:]
         return d
 
@@ -570,13 +568,13 @@ class odict(dict):
         return self._keys[:]
 
     def setdefault(self, key, failobj=None):
-        item = super(odict, self).setdefault(key, failobj)
+        item = super().setdefault(key, failobj)
         if key not in self._keys:
             self._keys.append(key)
         return item
 
     def update(self, dict):
-        super(odict, self).update(dict)
+        super().update(dict)
         for key in list(dict.keys()):
             if key not in self._keys:
                 self._keys.append(key)
@@ -613,8 +611,7 @@ def transplant_func(func, module):
     from nose.tools import make_decorator
     if isgenerator(func):
         def newfunc(*arg, **kw):
-            for v in func(*arg, **kw):
-                yield v
+            yield from func(*arg, **kw)
     else:
         def newfunc(*arg, **kw):
             return func(*arg, **kw)
