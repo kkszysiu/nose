@@ -10,7 +10,7 @@ units = os.path.normpath(os.path.join(here, '..', 'unit_tests'))
 
 if units not in sys.path:
     sys.path.insert(0, units)
-from mock import RecordingPluginManager
+from unittest.mock import RecordingPluginManager
 
 
 class TestPluginCalls(unittest.TestCase):

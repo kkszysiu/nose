@@ -156,11 +156,11 @@ class TestWithDoctest_2(PluginTester, unittest.TestCase):
 
     def setUp(self):
         sys.path.insert(0, os.path.join(support, 'idp'))
-        super(TestWithDoctest_2, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         sys.path.remove(os.path.join(support, 'idp'))
-        super(TestWithDoctest_2, self).tearDown()
+        super().tearDown()
 
     def makeSuite(self):
         return None
@@ -224,11 +224,11 @@ class TestWithDoctestFileTests_2(PluginTester, unittest.TestCase):
 
     def setUp(self):
         sys.path.insert(0, os.path.join(support, 'dtt', 'docs'))
-        super(TestWithDoctestFileTests_2, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         sys.path.remove(os.path.join(support, 'dtt', 'docs'))
-        super(TestWithDoctestFileTests_2, self).tearDown()
+        super().tearDown()
 
     def makeSuite(self):
         return None

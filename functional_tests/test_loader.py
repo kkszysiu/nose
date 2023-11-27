@@ -495,7 +495,7 @@ class TreePrintContextSuite(suite.ContextSuite):
             print(self, 'teardown <--')
     def __repr__(self):
         
-        return '%s<%s>' % (self.indent,
+        return '{}<{}>'.format(self.indent,
                            getattr(self.context, '__name__', self.context))
     __str__ = __repr__
 

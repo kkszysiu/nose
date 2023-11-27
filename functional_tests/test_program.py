@@ -114,7 +114,7 @@ class TestTestProgram(unittest.TestCase):
         print(repr(res))
 
         self.assertEqual(res.testsRun, 4,
-                         "Expected to run 4 tests, ran %s" % (res.testsRun,))
+                         "Expected to run 4 tests, ran {}".format(res.testsRun))
         assert not res.wasSuccessful()
         assert len(res.errors) == 1
 

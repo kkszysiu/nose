@@ -1,4 +1,3 @@
-
 import unittest, os
 from nose.plugins import PluginTester, Plugin
 from nose.tools import eq_
@@ -6,7 +5,7 @@ from io import StringIO
 
 class StubPlugin(Plugin):
     def options(self, parser, env=os.environ):
-        super(StubPlugin, self).options(parser, env=env)
+        super().options(parser, env=env)
     def configure(self, options, conf):
         pass    
 

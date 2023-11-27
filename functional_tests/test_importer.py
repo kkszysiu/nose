@@ -125,14 +125,14 @@ class TestImporter(unittest.TestCase):
         d1 = os.path.join(self.dir, 'dir1')
         m1 = imp.importFromDir(d1, 'mod')
         m2 = imp.importFromDir(d1, 'mod')
-        assert m1 is m2, "%s is not %s" % (m1, m2)
+        assert m1 is m2, "{} is not {}".format(m1, m2)
 
     def test_cached_no_reload_dotted(self):
         imp = self.imp
         d1 = os.path.join(self.dir, 'dir1')
         p1 = imp.importFromDir(d1, 'pak.mod')
         p2 = imp.importFromDir(d1, 'pak.mod')
-        assert p1 is p2, "%s is not %s" % (p1, p2)
+        assert p1 is p2, "{} is not {}".format(p1, p2)
 
     def test_import_sets_sys_modules(self):
         imp = self.imp

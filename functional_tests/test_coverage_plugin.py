@@ -37,10 +37,10 @@ class TestCoveragePlugin(PluginTester, unittest.TestCase):
             os.unlink(self.cover_file)
         if os.path.exists(self.cover_html_dir):
             shutil.rmtree(self.cover_html_dir)
-        super(TestCoveragePlugin, self).setUp()
+        super().setUp()
 
     def runTest(self):
-        print((self.output))
+        print(self.output)
         self.assertTrue(
                 # Coverage < 4.0
                 ("blah        4      3    25%   1" in self.output) or
@@ -71,7 +71,7 @@ class TestCoverageMinPercentagePlugin(PluginTester, unittest.TestCase):
         if os.path.exists(self.cover_html_dir):
             shutil.rmtree(self.cover_html_dir)
         self.assertRaises(SystemExit,
-                          super(TestCoverageMinPercentagePlugin, self).setUp)
+                          super().setUp)
 
     def runTest(self):
         pass
@@ -96,8 +96,7 @@ class TestCoverageMinPercentageSinglePackagePlugin(
         if os.path.exists(self.cover_html_dir):
             shutil.rmtree(self.cover_html_dir)
         self.assertRaises(SystemExit,
-                          super(TestCoverageMinPercentageSinglePackagePlugin,
-                              self).setUp)
+                          super().setUp)
 
     def runTest(self):
         pass
@@ -123,8 +122,7 @@ class TestCoverageMinPercentageSinglePackageWithBranchesPlugin(
             shutil.rmtree(self.cover_html_dir)
         self.assertRaises(
                 SystemExit,
-                super(TestCoverageMinPercentageSinglePackageWithBranchesPlugin,
-                    self).setUp)
+                super().setUp)
 
     def runTest(self):
         pass
@@ -148,7 +146,7 @@ class TestCoverageMinPercentageTOTALPlugin(PluginTester, unittest.TestCase):
         if os.path.exists(self.cover_html_dir):
             shutil.rmtree(self.cover_html_dir)
         self.assertRaises(SystemExit,
-                          super(TestCoverageMinPercentageTOTALPlugin, self).setUp)
+                          super().setUp)
 
     def runTest(self):
         pass
@@ -174,7 +172,7 @@ class TestCoverageMinPercentageWithBranchesTOTALPlugin(
             shutil.rmtree(self.cover_html_dir)
         self.assertRaises(
                 SystemExit,
-                super(TestCoverageMinPercentageWithBranchesTOTALPlugin, self).setUp)
+                super().setUp)
 
     def runTest(self):
         pass

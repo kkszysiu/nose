@@ -33,7 +33,7 @@ check.setup = inner_setup
 check.teardown = inner_teardown
 
 
-class TestClass(object):
+class TestClass:
     def setup(self):
         print("setup called in", self)
         self.called = ['setup']

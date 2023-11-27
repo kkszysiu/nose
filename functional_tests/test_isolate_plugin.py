@@ -33,11 +33,11 @@ class TestLoadFromNames(PluginTester, unittest.TestCase):
     def setUp(self):
         self._dir = os.getcwd()
         os.chdir(os.path.join(support, 'ipt'))
-        super(TestLoadFromNames, self).setUp()
+        super().setUp()
         
     def tearDown(self):
         os.chdir(self._dir)
-        super(TestLoadFromNames, self).tearDown()
+        super().tearDown()
 
     def makeSuite(self):
         return None
