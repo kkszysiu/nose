@@ -51,7 +51,7 @@ def mods():
     class TCType(type):
         def __new__(cls, name, bases, dct):
             return type.__new__(cls, name, bases, dct)
-    class TestMetaclassed(object, metaclass=TCType):
+    class TestMetaclassed(metaclass=TCType):
         def test_one(self):
             pass
         def test_two(self):

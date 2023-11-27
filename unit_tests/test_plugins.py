@@ -17,17 +17,17 @@ from nose.plugins.doctests import Doctest
 from nose.plugins.failuredetail import FailureDetail
 from nose.plugins.prof import Profile
 
-from mock import *
+from unittest.mock import *
 
 class P(Plugin):
     """Plugin of destiny!"""    
     pass
 
-class ErrPlugin(object):
+class ErrPlugin:
     def load(self):
         raise Exception("Failed to load the plugin")
     
-class ErrPkgResources(object):
+class ErrPkgResources:
     def iter_entry_points(self, ep):
         yield ErrPlugin()
 

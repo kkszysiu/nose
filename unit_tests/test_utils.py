@@ -122,12 +122,12 @@ class TestUtils(unittest.TestCase):
             pass
         class TC_Classic:
             pass
-        class TC_object(object):
+        class TC_object:
             pass
         # issue153 -- was not detecting custom typed classes...
         class TCType(type):
             pass
-        class TC_custom_type(object, metaclass=TCType):
+        class TC_custom_type(metaclass=TCType):
             pass
         class TC_unittest_custom_type(unittest.TestCase, metaclass=TCType):
             pass

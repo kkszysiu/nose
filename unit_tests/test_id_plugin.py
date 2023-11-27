@@ -1,7 +1,7 @@
 import unittest
 from nose.config import Config
 from nose.plugins.builtin import TestId
-import mock
+from unittest import mock
 
 class TestTestIdPlugin(unittest.TestCase):
 
@@ -13,7 +13,7 @@ class TestTestIdPlugin(unittest.TestCase):
         tid.configure(opt, c)
         print(tid.idfile)
         assert tid.idfile.startswith(c.workingDir), \
-               "%s is not under %s" % (tid.idfile, c.workingDir)
+               "{} is not under {}".format(tid.idfile, c.workingDir)
 
 
 if __name__ == '__main__':

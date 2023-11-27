@@ -61,7 +61,7 @@ class TestTools(unittest.TestCase):
         no_raise = raises(TypeError)(noraise)
 
         tc = FunctionTestCase(raise_good)
-        self.assertEqual(str(tc), "%s.%s" % (__name__, 'raise_typeerror'))
+        self.assertEqual(str(tc), "{}.{}".format(__name__, 'raise_typeerror'))
 
         raise_good()
         try:

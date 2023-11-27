@@ -60,10 +60,7 @@ class TestExpander(unittest.TestCase):
             et, ev, tb = sys.exc_info()
             lines, lineno = tbsource(tb)
             out = textwrap.dedent(''.join(lines))
-            if sys.version_info < (3,):
-                first_line = '    print n\n'
-            else:
-                first_line = '    print(n)\n'
+            first_line = '    print(n)\n'
             self.assertEqual(out,
                              first_line +
                              '    assert n % 2 == 0\n'
@@ -116,10 +113,7 @@ class TestExpander(unittest.TestCase):
             et, ev, tb = sys.exc_info()
             out = inspect_traceback(tb)
             print("'%s'" % out.strip())
-            if sys.version_info < (3,):
-                print_line = "    print 1, 3\n"
-            else:
-                print_line = "    print(1, 3)\n"
+            print_line = "    print(1, 3)\n"
             self.assertEqual(out.strip(),
                              "assert {'setup': 1}['setup']\n" +
                              print_line +

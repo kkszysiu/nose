@@ -5,7 +5,7 @@ from nose.suite import LazySuite, ContextSuite, ContextSuiteFactory, \
 import imp
 import sys
 import unittest
-from mock import ResultProxyFactory, ResultProxy
+from unittest.mock import ResultProxyFactory, ResultProxy
 
 
 class TestLazySuite(unittest.TestCase):
@@ -22,8 +22,7 @@ class TestLazySuite(unittest.TestCase):
         TC = self.TC
         tests = [TC('test_one'), TC('test_two')]
         def gen_tests():
-            for test in tests:
-                yield test
+            yield from tests
         suite = LazySuite(gen_tests)
         self.assertEqual(list([test for test in suite]), tests)
 
@@ -31,8 +30,7 @@ class TestLazySuite(unittest.TestCase):
         TC = self.TC
         tests = [TC('test_one'), TC('test_two')]
         def gen_tests():
-            for test in tests:
-                yield test
+            yield from tests
 
         nonlazy = LazySuite(tests)
         lazy = LazySuite(gen_tests)
@@ -60,8 +58,7 @@ class TestLazySuite(unittest.TestCase):
         TC = self.TC
         tests = [TC('test_one'), TC('test_two')]
         def gen_tests():
-            for test in tests:
-                yield test
+            yield from tests
 
         lazy = LazySuite(gen_tests)
         assert lazy
@@ -77,8 +74,7 @@ class TestLazySuite(unittest.TestCase):
         assert lazy
 
         def gen_tests_empty():
-            for test in []:
-                yield test
+            yield from []
             return
         empty = LazySuite(gen_tests_empty)
         assert not empty

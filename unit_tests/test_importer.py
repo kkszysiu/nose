@@ -22,7 +22,7 @@ class TestImporter(unittest.TestCase):
         assert not foobar in sys.path
         assert not foo in sys.path
         assert where in sys.path
-        assert sys.path[0] == where, "%s first should be %s" % (sys.path, where)
+        assert sys.path[0] == where, "{} first should be {}".format(sys.path, where)
 
     def test_import(self):
         where = os.path.abspath(os.path.join(os.path.dirname(__file__),

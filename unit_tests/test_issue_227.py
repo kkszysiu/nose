@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 from nose.plugins.skip import SkipTest
 import sys
 
