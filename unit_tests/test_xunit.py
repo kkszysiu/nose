@@ -1,4 +1,3 @@
-
 import sys
 import os
 import optparse
@@ -28,7 +27,7 @@ time_taken = re.compile(r'\d\.\d\d')
 class TestSplitId(unittest.TestCase):
 
     def check_id_split(self, cls, name):
-        split = id_split('%s.%s' % (cls, name))
+        split = id_split('{}.{}'.format(cls, name))
         eq_(split[0], cls)
         eq_(split[1], name)
 
@@ -92,7 +91,7 @@ class TestTee(unittest.TestCase):
             l.warn('Test')
         except Exception as e:
             self.fail(
-                "Exception raised while writing to distutils.log: %s" % (e,))
+                "Exception raised while writing to distutils.log: {}".format(e))
 
 
 class TestXMLOutputWithXML(unittest.TestCase):
@@ -144,7 +143,7 @@ class BaseTestXMLOutputWithXML(unittest.TestCase):
 
 class TestXMLOutputWithXMLAndPrefix(BaseTestXMLOutputWithXML):
     def setUp(self):
-        super(TestXMLOutputWithXMLAndPrefix, self).setUp()
+        super().setUp()
 
     def _assert_testcase_classname(self, expected_classname):
         test = mktest()
@@ -186,7 +185,7 @@ class TestXMLOutputWithXMLAndPrefix(BaseTestXMLOutputWithXML):
 
 class TestXMLOutputWithXML(BaseTestXMLOutputWithXML):
     def setUp(self):
-        super(TestXMLOutputWithXML, self).setUp()
+        super().setUp()
         self.configure([
             "--with-xunit",
             "--xunit-file=%s" % self.xmlfile
@@ -220,7 +219,7 @@ class TestXMLOutputWithXML(BaseTestXMLOutputWithXML):
                         'Expected decimal time: %s' % tc.attrib['time'])
 
             err = tc.find("failure")
-            eq_(err.attrib['type'], "%s.AssertionError" % (AssertionError.__module__,))
+            eq_(err.attrib['type'], "{}.AssertionError".format(AssertionError.__module__))
             err_lines = err.text.strip().split("\n")
             eq_(err_lines[0], 'Traceback (most recent call last):')
             eq_(err_lines[-1], 'AssertionError: one is not \'equal\' to two')
@@ -287,7 +286,7 @@ class TestXMLOutputWithXML(BaseTestXMLOutputWithXML):
                         'Expected decimal time: %s' % tc.attrib['time'])
 
             err = tc.find("error")
-            eq_(err.attrib['type'], "%s.RuntimeError" % (RuntimeError.__module__,))
+            eq_(err.attrib['type'], "{}.RuntimeError".format(RuntimeError.__module__))
             err_lines = err.text.strip().split("\n")
             eq_(err_lines[0], 'Traceback (most recent call last):')
             eq_(err_lines[-1], 'RuntimeError: some error happened')
