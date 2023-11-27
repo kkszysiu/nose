@@ -282,9 +282,9 @@ class FunctionTestCase(TestBase):
             name = func.compat_func_name
         else:
             name = func.__name__
-        name = "%s.%s" % (func.__module__, name)
+        name = "{}.{}".format(func.__module__, name)
         if not self.arg_repr == '()':
-            name = "%s%s" % (name, self.arg_repr)
+            name = "{}{}".format(name, self.arg_repr)
         # FIXME need to include the full dir path to disambiguate
         # in cases where test module of the same name was seen in
         # another directory (old fromDirectory)
@@ -351,11 +351,11 @@ class MethodTestCase(TestBase):
             name = func.compat_func_name
         else:
             name = func.__name__
-        name = "%s.%s.%s" % (self.cls.__module__,
+        name = "{}.{}.{}".format(self.cls.__module__,
                              self.cls.__name__,
                              name)
         if not self.arg_repr == '()':
-            name = "%s%s" % (name, self.arg_repr)
+            name = "{}{}".format(name, self.arg_repr)
         return name
     __repr__ = __str__
 

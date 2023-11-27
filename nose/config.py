@@ -38,7 +38,7 @@ class ConfigError(Exception):
     pass
 
 
-class ConfiguredDefaultsOptionParser(object):
+class ConfiguredDefaultsOptionParser:
     """
     Handler for options from commandline and config files.
     """
@@ -138,7 +138,7 @@ class ConfiguredDefaultsOptionParser(object):
         return self._parser.parse_args(args, values)
 
 
-class Config(object):
+class Config:
     """nose configuration.
 
     Instances of Config are used throughout nose to configure
@@ -156,9 +156,9 @@ class Config(object):
       self.getTestCaseNamesCompat = False
       self.includeExe = env.get('NOSE_INCLUDE_EXE',
                                 sys.platform in exe_allowed_platforms)
-      self.ignoreFiles = (re.compile(r'^\.'),
+      self.ignoreFiles = (re.compile(r'^\\.'),
                           re.compile(r'^_'),
-                          re.compile(r'^setup\.py$')
+                          re.compile(r'^setup\\.py$')
                           )
       self.include = None
       self.loggingConfig = None
@@ -249,7 +249,7 @@ class Config(object):
         keys = [ k for k in list(d.keys())
                  if not k.startswith('_') ]
         keys.sort()
-        return "Config(%s)" % ', '.join([ '%s=%r' % (k, d[k])
+        return "Config(%s)" % ', '.join([ '{}={!r}'.format(k, d[k])
                                           for k in keys ])
     __str__ = __repr__
 
@@ -290,8 +290,7 @@ class Config(object):
             self.testNames.extend(tolist(options.testNames))
 
         if options.py3where is not None:
-            if sys.version_info >= (3,):
-                options.where = options.py3where
+            options.where = options.py3where
 
         # `where` is an append action, so it can't have a default value
         # in the parser, or that default will always be in the list
@@ -610,7 +609,7 @@ class Config(object):
         self.__dict__.update(d)
 
 
-class NoOptions(object):
+class NoOptions:
     """Options container that returns None for all options.
     """
     def __getstate__(self):

@@ -163,7 +163,7 @@ else:
             opt = self.__parser.get_option(long_optname)
             if opt.action in ('store_true', 'store_false'):
                 if not flag(value):
-                    raise ValueError("Invalid value '%s' for '%s'" % (
+                    raise ValueError("Invalid value '{}' for '{}'".format(
                         value, optname))
                 if _bool(value):
                     argv.append(long_optname)

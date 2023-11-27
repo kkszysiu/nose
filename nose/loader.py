@@ -94,7 +94,7 @@ class TestLoader(unittest.TestLoader):
             add_path(workingDir, config)
         self.suiteClass = ContextSuiteFactory(config=config)
 
-        self._visitedPaths = set([])
+        self._visitedPaths = set()
 
         unittest.TestLoader.__init__(self)
 
@@ -230,7 +230,7 @@ class TestLoader(unittest.TestLoader):
                 return self.suiteClass(tests)
             else:
                 # Nothing was able to even try to load from this file
-                open(filename, 'r').close() # trigger os error
+                open(filename).close() # trigger os error
                 raise ValueError("Unable to load tests from file %s"
                                  % filename)
         except (KeyboardInterrupt, SystemExit):
@@ -492,7 +492,7 @@ class TestLoader(unittest.TestLoader):
         # super. This avoids having to extract cases and rebuild a context
         # suite when there are no plugin-contributed cases.
         if not cases:
-            return super(TestLoader, self).loadTestsFromTestCase(testCaseClass)
+            return super().loadTestsFromTestCase(testCaseClass)
         cases.extend(
             [case for case in
              super(TestLoader, self).loadTestsFromTestCase(testCaseClass)])

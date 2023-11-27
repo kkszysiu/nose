@@ -116,7 +116,7 @@ class TextTestResult(_TextTestResult):
         plural = run != 1 and "s" or ""
 
         writeln(self.separator2)
-        writeln("Ran %s test%s in %.3fs" % (run, plural, taken))
+        writeln("Ran {} test{} in {:.3f}s".format(run, plural, taken))
         writeln()
 
         summary = {}
@@ -140,7 +140,7 @@ class TextTestResult(_TextTestResult):
         if items:
             items.sort()
             write(" (")
-            write(", ".join(["%s=%s" % (label, count) for
+            write(", ".join(["{}={}".format(label, count) for
                              label, count in items]))
             writeln(")")
         else:

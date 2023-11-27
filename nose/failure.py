@@ -27,7 +27,7 @@ class Failure(unittest.TestCase):
         unittest.TestCase.__init__(self)
 
     def __str__(self):
-        return "Failure: %s (%s)" % (
+        return "Failure: {} ({})".format(
             getattr(self.exc_class, '__name__', self.exc_class), self.exc_val)
 
     def address(self):

@@ -51,7 +51,7 @@ else:
                     path = init_path
                     break
             else:
-                raise ValueError('{!r} is not a package'.format(path))
+                raise ValueError(f'{path!r} is not a package')
         spec = importlib.util.spec_from_file_location(name, path,
                                                       submodule_search_locations=[])
         sys.modules[name] = importlib.util.module_from_spec(spec)
@@ -139,7 +139,7 @@ except AttributeError:
                 os.path.normcase(os.path.realpath(dst)))
 
 
-class Importer(object):
+class Importer:
     """An importer class that does only path-specific imports. That
     is, the given module is not searched for on sys.path, but only at
     the path or in the directory specified.
@@ -189,7 +189,7 @@ class Importer(object):
             if part_fqname == '':
                 part_fqname = part
             else:
-                part_fqname = "%s.%s" % (part_fqname, part)
+                part_fqname = "{}.{}".format(part_fqname, part)
             try:
                 acquire_lock()
                 log.debug("find module part %s (%s) in %s",

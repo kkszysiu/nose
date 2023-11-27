@@ -85,7 +85,7 @@ def tbsource(tb, context=6):
         
         try:
             lines, dummy = inspect.findsource(frame)
-        except IOError:
+        except OSError:
             lines, index = [''], 0
         else:
             all_lines = lines
@@ -107,7 +107,7 @@ def tbsource(tb, context=6):
 
     
 def find_inspectable_lines(lines, pos):
-    """Find lines in home that are inspectable.
+    r"""Find lines in home that are inspectable.
     
     Walk back from the err line up to 3 lines, but don't walk back over
     changes in indent level.

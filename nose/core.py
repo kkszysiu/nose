@@ -150,7 +150,7 @@ class TestProgram(unittest.TestProgram):
         if self.config.options.version:
             from nose import __version__
             sys.stdout = sys.__stdout__
-            print("%s version %s" % (os.path.basename(sys.argv[0]), __version__))
+            print("{} version {}".format(os.path.basename(sys.argv[0]), __version__))
             sys.exit(0)
 
         if self.config.options.showPlugins:
@@ -253,7 +253,7 @@ class TestProgram(unittest.TestProgram):
                 os.path.dirname(__file__), 'usage.txt'))
         except AttributeError:
             f = open(os.path.join(
-                os.path.dirname(__file__), 'usage.txt'), 'r')
+                os.path.dirname(__file__), 'usage.txt'))
             try:
                 text = f.read()
             finally:

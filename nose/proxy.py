@@ -35,7 +35,7 @@ def proxied_attribute(local_attr, proxied_attr, doc):
     return property(fget, fset, fdel, doc)
 
 
-class ResultProxyFactory(object):
+class ResultProxyFactory:
     """Factory for result proxies. Generates a ResultProxy bound to each test
     and the result passed to the test.
     """
@@ -64,7 +64,7 @@ class ResultProxyFactory(object):
         return ResultProxy(result, test, config=self.config)
 
 
-class ResultProxy(object):
+class ResultProxy:
     """Proxy to TestResults (or other results handler).
 
     One ResultProxy is created for each nose.case.Test. The result

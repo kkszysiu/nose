@@ -26,7 +26,7 @@ op_isabs = os.path.isabs
 op_abspath = os.path.abspath
 
 
-class Selector(object):
+class Selector:
     """Core test selector. Examines test candidates and determines whether,
     given the specified configuration, the test candidate should be selected
     as a test.
@@ -195,7 +195,7 @@ class Selector(object):
 defaultSelector = Selector        
 
 
-class TestAddress(object):
+class TestAddress:
     """A test address represents a user's request to run a particular
     test. The user may specify a filename or module (or neither),
     and/or a callable (a class, function, or method). The naming
@@ -243,5 +243,5 @@ class TestAddress(object):
         return self.name
 
     def __repr__(self):
-        return "%s: (%s, %s, %s)" % (self.name, self.filename,
+        return "{}: ({}, {}, {})".format(self.name, self.filename,
                                      self.module, self.call)

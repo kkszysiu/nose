@@ -34,7 +34,7 @@ _def = object()
 
 
 def _strclass(cls):
-    return "%s.%s" % (cls.__module__, cls.__name__)
+    return "{}.{}".format(cls.__module__, cls.__name__)
 
 class MixedContextError(Exception):
     """Error raised when a context suite sees tests from more than
@@ -49,14 +49,14 @@ class LazySuite(unittest.TestSuite):
     def __init__(self, tests=()):
         """Initialize the suite. tests may be an iterable or a generator
         """
-        super(LazySuite, self).__init__()
+        super().__init__()
         self._set_tests(tests)
 
     def __iter__(self):
         return iter(self._tests)
 
     def __repr__(self):
-        return "<%s tests=generator (%s)>" % (
+        return "<{} tests=generator ({})>".format(
             _strclass(self.__class__), id(self))
 
     def __hash__(self):
@@ -92,12 +92,10 @@ class LazySuite(unittest.TestSuite):
 
     def _get_tests(self):
         log.debug("precache is %s", self._precache)
-        for test in self._precache:
-            yield test
+        yield from self._precache
         if self.test_generator is None:
             return
-        for test in self.test_generator:
-            yield test
+        yield from self.test_generator
 
     def _set_tests(self, tests):
         self._precache = []
@@ -155,17 +153,17 @@ class ContextSuite(LazySuite):
         self.has_run = False
         self.can_split = can_split
         self.error_context = None
-        super(ContextSuite, self).__init__(tests)
+        super().__init__(tests)
 
     def __repr__(self):
-        return "<%s context=%s>" % (
+        return "<{} context={}>".format(
             _strclass(self.__class__),
             getattr(self.context, '__name__', self.context))
     __str__ = __repr__
 
     def id(self):
         if self.error_context:
-            return '%s:%s' % (repr(self), self.error_context)
+            return '{}:{}'.format(repr(self), self.error_context)
         else:
             return repr(self)
 
@@ -380,7 +378,7 @@ class ContextSuite(LazySuite):
                       "inside of a context wrapper.")
 
 
-class ContextSuiteFactory(object):
+class ContextSuiteFactory:
     """Factory for ContextSuites. Called with a collection of tests,
     the factory decides on a hierarchy of contexts by introspecting
     the collection or the tests themselves to find the objects
@@ -552,7 +550,7 @@ class ContextSuiteFactory(object):
         return wrapped
 
 
-class ContextList(object):
+class ContextList:
     """Not quite a suite -- a group of tests in a context. This is used
     to hint the ContextSuiteFactory about what context the tests
     belong to, in cases where it may be ambiguous or missing.
@@ -572,7 +570,7 @@ class FinalizingSuiteWrapper(unittest.TestSuite):
     control.
     """
     def __init__(self, suite, finalize):
-        super(FinalizingSuiteWrapper, self).__init__()
+        super().__init__()
         self.suite = suite
         self.finalize = finalize
 
