@@ -16,7 +16,7 @@ __all__ = ['make_instancemethod', 'cmp_to_key', 'sort_list', 'ClassType',
 # In Python 3.x, all strings are unicode (the call to 'unicode()' in the 2.x
 # source will be replaced with 'str()' when running 2to3, so this test will
 # then become true)
-UNICODE_STRINGS = (type(str()) == type(str()))
+UNICODE_STRINGS = (type('') == type(''))
 
 if sys.version_info[:2] < (3, 0):
     def force_unicode(s, encoding='UTF-8'):
@@ -46,7 +46,7 @@ except ImportError:
 # user-provideable cmp function, so we need some way to convert that.
 def cmp_to_key(mycmp):
     'Convert a cmp= function into a key= function'
-    class Key(object):
+    class Key:
         def __init__(self, obj):
             self.obj = obj
         def __lt__(self, other):
@@ -100,7 +100,7 @@ class UnboundMethod:
         filename = getattr(module, '__file__', None)
         if filename is not None:
             filename = os.path.abspath(filename)
-        return (nose.util.src(filename), modname, "%s.%s" % (cls.__name__,
+        return (nose.util.src(filename), modname, "{}.{}".format(cls.__name__,
                                                         self._func.__name__))
 
     def __call__(self, *args, **kwargs):
@@ -110,7 +110,7 @@ class UnboundMethod:
         return getattr(self._func, attr)
 
     def __repr__(self):
-        return '<unbound method %s.%s>' % (self.__self__.cls.__name__,
+        return '<unbound method {}.{}>'.format(self.__self__.cls.__name__,
                                            self._func.__name__)
 
 class UnboundSelf:
@@ -129,7 +129,7 @@ def unbound_method(cls, func):
     if inspect.ismethod(func):
         return func
     if not inspect.isfunction(func):
-        raise TypeError('%s is not a function' % (repr(func),))
+        raise TypeError('{} is not a function'.format(repr(func)))
     return UnboundMethod(cls, func)
 
 def ismethod(obj):
@@ -137,14 +137,10 @@ def ismethod(obj):
 
 
 # Make a pseudo-bytes function that can be called without the encoding arg:
-if sys.version_info >= (3, 0):
-    def bytes_(s, encoding='utf8'):
-        if isinstance(s, bytes):
-            return s
-        return bytes(s, encoding)
-else:
-    def bytes_(s, encoding=None):
-        return str(s)
+def bytes_(s, encoding='utf8'):
+    if isinstance(s, bytes):
+        return s
+    return bytes(s, encoding)
 
 
 if sys.version_info[:2] >= (2, 6):
@@ -187,7 +183,7 @@ if sys.version_info[:2] < (3, 0):
                 msg = force_unicode(msg, encoding=encoding)
                 clsname = force_unicode(ev.__class__.__name__,
                         encoding=encoding)
-                ev = '%s: %s' % (clsname, msg)
+                ev = '{}: {}'.format(clsname, msg)
         elif not isinstance(ev, str):
             ev = repr(ev)
 
