@@ -6,7 +6,7 @@ from optparse import OptionParser
 import nose.core
 from nose.config import Config, all_config_files
 from nose.tools import set_trace
-from mock import Bucket, MockOptParser
+from unittest.mock import Bucket, MockOptParser
 
 
 class NullLoader:
@@ -29,7 +29,7 @@ class TestAPI_run(unittest.TestCase):
         stdout_after = sys.stdout
         self.assertEqual(stdout, stdout_after)
 
-class Undefined(object):
+class Undefined:
     pass
 
 class TestUsage(unittest.TestCase):
@@ -44,12 +44,12 @@ class TestUsage(unittest.TestCase):
 
         # simulates importing nose from a zip archive
         # with a zipimport.zipimporter instance
-        class fake_zipimporter(object):
+        class fake_zipimporter:
 
             def get_data(self, path):
                 requested_data.append(path)
                 # Return as str in Python 2, bytes in Python 3.
-                return '<usage>'.encode('utf-8')
+                return b'<usage>'
 
         existing_loader = getattr(nose, '__loader__', Undefined)
         try:

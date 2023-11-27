@@ -3,7 +3,7 @@ import unittest
 from inspect import ismethod
 from nose.config import Config
 from nose.proxy import ResultProxyFactory, ResultProxy
-from mock import RecordingPluginManager
+from unittest.mock import RecordingPluginManager
 
 class TestResultProxy(unittest.TestCase):
 

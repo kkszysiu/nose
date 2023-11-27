@@ -56,7 +56,7 @@ class ResultProxy(proxy.ResultProxy):
         self.called.append(('addSuccess', test))
     
 
-class RecordingPluginManager(object):
+class RecordingPluginManager:
 
     def __init__(self):
         self.reset()
@@ -75,7 +75,7 @@ class RecordingPluginManager(object):
         return list(self.called.keys())
 
 
-class RecordingPluginProxy(object):
+class RecordingPluginProxy:
 
     def __init__(self, manager, call):
         self.man = manager
@@ -86,7 +86,7 @@ class RecordingPluginProxy(object):
         return self.man.null_call(self.call, *arg, **kw)
 
 
-class Bucket(object):
+class Bucket:
     def __init__(self, **kw):
         self.__dict__['d'] = {}
         self.__dict__['d'].update(kw)
@@ -100,7 +100,7 @@ class Bucket(object):
         self.d[attr] = val
 
 
-class MockOptParser(object):
+class MockOptParser:
     def __init__(self):
         self.opts = []
     def add_option(self, *args, **kw):

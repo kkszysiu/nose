@@ -5,7 +5,7 @@ import nose.case
 import nose.failure
 from nose.pyversion import unbound_method
 from nose.config import Config
-from mock import ResultProxyFactory, ResultProxy
+from unittest.mock import ResultProxyFactory, ResultProxy
 
 class TestNoseCases(unittest.TestCase):
 
@@ -24,7 +24,7 @@ class TestNoseCases(unittest.TestCase):
         res = unittest.TestResult()
 
         a = []
-        class TestClass(object):
+        class TestClass:
             def test_func(self, a=a):
                 a.append(1)
 
@@ -40,7 +40,7 @@ class TestNoseCases(unittest.TestCase):
             def __new__(cls, name, bases, dct):
                 return type.__new__(cls, name, bases, dct)
         a = []
-        class TestClass(object, metaclass=TestType):
+        class TestClass(metaclass=TestType):
             def test_func(self, a=a):
                 a.append(1)
 
@@ -52,7 +52,7 @@ class TestNoseCases(unittest.TestCase):
     def test_method_test_case_fixtures(self):        
         res = unittest.TestResult()
         called = []
-        class TestClass(object):
+        class TestClass:
             def setup(self):
                 called.append('setup')
             def teardown(self):
@@ -115,7 +115,7 @@ class TestNoseCases(unittest.TestCase):
         assert res.errors
 
     def test_FunctionTestCase_repr_is_consistent_with_mutable_args(self):
-        class Foo(object):
+        class Foo:
             def __init__(self):
                 self.bar = 'unmodified'
             def __repr__(self):
@@ -134,13 +134,13 @@ class TestNoseCases(unittest.TestCase):
             "case's __repr__")
 
     def test_MethodTestCase_repr_is_consistent_with_mutable_args(self):
-        class Foo(object):
+        class Foo:
             def __init__(self):
                 self.bar = 'unmodified'
             def __repr__(self):
                 return "Foo(%s)" % self.bar
 
-        class FooTester(object):
+        class FooTester:
             def test_foo(self, foo):
                 pass
 

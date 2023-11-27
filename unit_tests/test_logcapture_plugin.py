@@ -13,7 +13,7 @@ if sys.version_info >= (2, 7):
 else:
     py27 = False
 
-class TestLogCapturePlugin(object):
+class TestLogCapturePlugin:
 
     def test_enabled_by_default(self):
         c = LogCapture()
@@ -93,8 +93,8 @@ class TestLogCapturePlugin(object):
         repr_2 = repr(mutable)
         c.end()
         records = c.formatLogRecords()
-        eq_("mutable: DEBUG: %s" % (repr_1,), records[0])
-        eq_("mutable: DEBUG: %s" % (repr_2,), records[1])
+        eq_("mutable: DEBUG: {}".format(repr_1), records[0])
+        eq_("mutable: DEBUG: {}".format(repr_2), records[1])
 
     def test_loglevel(self):
         c = LogCapture()
@@ -161,7 +161,7 @@ class TestLogCapturePlugin(object):
         c.start()
         log = logging.getLogger("foobar.something")
         filtered = []
-        class filter(object):
+        class filter:
             def filter(record):
                 filtered.append(record)
                 return len(filtered) == 1

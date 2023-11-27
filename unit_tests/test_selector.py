@@ -6,7 +6,7 @@ import nose.selector
 from nose.config import Config
 from nose.selector import log, Selector
 from nose.util import absdir
-from mock import mod
+from unittest.mock import mod
 
 class TestSelector(unittest.TestCase):
 
@@ -74,7 +74,7 @@ class TestSelector(unittest.TestCase):
         class TestType(type):
             def __new__(cls, name, bases, dct):
                 return type.__new__(cls, name, bases, dct)
-        class TestClass(object, metaclass=TestType):
+        class TestClass(metaclass=TestType):
             pass
         
         s = Selector(Config())

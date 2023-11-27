@@ -5,7 +5,7 @@ from nose.plugins.cover import Coverage
 from nose.tools import eq_
 
 
-class TestCoveragePlugin(object):
+class TestCoveragePlugin:
 
     def test_cover_options_packages(self):
         _test_options_helper('--cover-package', 'coverPackages',

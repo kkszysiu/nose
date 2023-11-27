@@ -3,7 +3,7 @@ import sys
 import unittest
 from nose.config import Config
 from nose.plugins import doctests
-from mock import Bucket
+from unittest.mock import Bucket
 
 class TestDoctestErrorHandling(unittest.TestCase):
 
