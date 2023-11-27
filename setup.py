@@ -6,20 +6,16 @@ py_vers_tag = '-%s.%s' % sys.version_info[:2]
 
 test_dirs = ['functional_tests', 'unit_tests', os.path.join('doc','doc_tests'), 'nose']
 
-if sys.version_info >= (3,):
-    try:
-        import setuptools
-    except ImportError:
-        from distribute_setup import use_setuptools
-        use_setuptools()
+try:
+    import setuptools
+except ImportError:
+    from distribute_setup import use_setuptools
+    use_setuptools()
 
-    extra = {'use_2to3': True,
-             'test_dirs': test_dirs,
-             'test_build_dir': 'build/tests',
-             'pyversion_patching': True,
-             }
-else:
-    extra = {}
+extra = {'test_dirs': test_dirs,
+         'test_build_dir': 'build/tests',
+         'pyversion_patching': True,
+         }
 
 try:
     from setup3lib import setup
@@ -53,9 +49,9 @@ try:
 
             bad_text = re.compile(
                 "\n"
-                "sys.exit\(\n"
-                "   load_entry_point\(([^\)]+)\)\(\)\n"
-                "\)\n")
+                "sys.exit\\(\n"
+                "   load_entry_point\\(([^\\)]+)\\)\\(\\)\n"
+                "\\)\n")
             good_text = (
                 "\n"
                 "if __name__ == '__main__':\n"
