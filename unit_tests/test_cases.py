@@ -5,7 +5,8 @@ import nose.case
 import nose.failure
 from nose.pyversion import unbound_method
 from nose.config import Config
-from unittest.mock import ResultProxyFactory, ResultProxy
+
+from mock import ResultProxyFactory, ResultProxy
 
 class TestNoseCases(unittest.TestCase):
 
