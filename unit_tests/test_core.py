@@ -6,7 +6,8 @@ from optparse import OptionParser
 import nose.core
 from nose.config import Config, all_config_files
 from nose.tools import set_trace
-from unittest.mock import Bucket, MockOptParser
+
+from mock import Bucket, MockOptParser
 
 
 class NullLoader:
