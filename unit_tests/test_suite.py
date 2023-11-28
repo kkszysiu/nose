@@ -5,7 +5,8 @@ from nose.suite import LazySuite, ContextSuite, ContextSuiteFactory, \
 import imp
 import sys
 import unittest
-from unittest.mock import ResultProxyFactory, ResultProxy
+
+from mock import ResultProxyFactory, ResultProxy
 
 
 class TestLazySuite(unittest.TestCase):

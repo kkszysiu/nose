@@ -6,7 +6,8 @@ import nose.selector
 from nose.config import Config
 from nose.selector import log, Selector
 from nose.util import absdir
-from unittest.mock import mod
+
+from mock import mod
 
 class TestSelector(unittest.TestCase):
 
