@@ -17,7 +17,7 @@ from nose.plugins.doctests import Doctest
 from nose.plugins.failuredetail import FailureDetail
 from nose.plugins.prof import Profile
 
-from unittest.mock import *
+from mock import Bucket, MockOptParser, mod
 
 class P(Plugin):
     """Plugin of destiny!"""    
@@ -30,10 +30,6 @@ class ErrPlugin:
 class ErrPkgResources:
     def iter_entry_points(self, ep):
         yield ErrPlugin()
-
-        
-# some plugins have 2.4-only features
-compat_24 = sys.version_info >= (2, 4)
 
 
 class TestBuiltinPlugins(unittest.TestCase):
@@ -220,14 +216,6 @@ class TestAttribPlugin(unittest.TestCase):
                     'help': 'Run only tests that have attributes '
                     'specified by ATTR [NOSE_ATTR]'})]
 
-        if compat_24:
-            expect.append(
-                (('-A', '--eval-attr'),
-                 {'dest': 'eval_attr', 'action': 'append',
-                  'default': None, 'metavar': 'EXPR',
-                  'help': 'Run only tests for whose attributes the '
-                  'Python expression EXPR evaluates to True '
-                  '[NOSE_EVAL_ATTR]'}))
         self.assertEqual(parser.opts, expect)
 
         opt = Bucket()
@@ -247,13 +235,6 @@ class TestAttribPlugin(unittest.TestCase):
         plug.configure(opt, Config())
         self.assertEqual(plug.attribs, [[('something', True)]] )
         
-        if compat_24:
-            opt.attr = None
-            opt.eval_attr = [ 'weird >= 66' ]
-            plug.configure(opt, Config())
-            self.assertEqual(plug.attribs[0][0][0], 'weird >= 66')
-            assert callable(plug.attribs[0][0][1])
-                       
     def test_basic_attr(self):
         def f():
             pass
@@ -281,33 +262,6 @@ class TestAttribPlugin(unittest.TestCase):
         assert plug.wantMethod(unbound_method(TestP, TestP.h)) is not False
         assert plug.wantFunction(i) is False
         
-    def test_eval_attr(self):
-        if not compat_24:
-            warn("No support for eval attributes in python versions older"
-                 " than 2.4")
-            return
-        def f():
-            pass
-        f.monkey = 2
-        
-        def g():
-            pass
-        g.monkey = 6
-
-        def h():
-            pass
-        h.monkey = 5
-        
-        cnf = Config()
-        opt = Bucket()
-        opt.eval_attr = "monkey > 5"
-        plug = AttributeSelector()
-        plug.configure(opt, cnf)
-
-        assert not plug.wantFunction(f)
-        assert plug.wantFunction(g) is not False
-        assert not plug.wantFunction(h)
-
     def test_attr_a_b(self):
         def f1():
             pass

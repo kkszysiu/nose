@@ -1,7 +1,8 @@
 import unittest
 from nose.config import Config
 from nose.plugins.builtin import TestId
-from unittest import mock
+
+import mock
 
 class TestTestIdPlugin(unittest.TestCase):
 
