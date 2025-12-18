@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nose-ng"
-version = "1.4.1"
+version = "1.4.2"
 description = "nose extends unittest to make testing easier"
 readme = "README.txt"
 license = {text = "GNU LGPL"}
