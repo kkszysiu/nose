@@ -24,31 +24,17 @@ import re
 from logging import debug, info, warning
 import sys
 
-try:
-  # cStringIO doesn't support unicode in 2.5
-  from io import StringIO
-except ImportError:
-  # StringIO has been renamed to 'io' in 3.x
-  from io import StringIO
+from io import StringIO
 
 from os.path import exists, isfile, abspath
 from os import unlink
 
 _open = open
 
-if sys.version_info >= (3,):
-    # Open files with universal newline support but no newline translation (3.x)
-    def open(filename, mode='r'):
-        return _open(filename, mode, newline='')
-else:
-    # Open files with universal newline support but no newline translation (2.x)
-    def open(filename, mode='r'):
-        return _open(filename, mode + 'b')
 
-    # Python 3.x has changed iter.next() to be next(iter) instead, so for
-    # backwards compatibility, we'll just define a next() function under 2.x
-    def next(iter):
-        return iter.__next__()
+# Open files with universal newline support but no newline translation
+def open(filename, mode='r'):
+    return _open(filename, mode, newline='')
 
 
 #------------------------------------------------
