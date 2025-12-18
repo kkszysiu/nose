@@ -177,6 +177,12 @@ class ResultProxy:
         self.plugins.stopTest(self.test)
         self.result.stopTest(self.test)
 
+    def addDuration(self, test, elapsed):
+        # Python 3.12+ calls this to report test duration
+        self.assertMyTest(test)
+        if hasattr(self.result, 'addDuration'):
+            self.result.addDuration(self.test, elapsed)
+
     # proxied attributes
     shouldStop = proxied_attribute('result', 'shouldStop',
                                     """Should the test run stop?""")
