@@ -1,4 +1,4 @@
-import imp
+import types
 import os
 import sys
 import unittest
@@ -20,22 +20,22 @@ def mods():
     # test loading
     #
     M = {}
-    M['test_module'] = imp.new_module('test_module')
-    M['module'] = imp.new_module('module')
-    M['package'] = imp.new_module('package')
+    M['test_module'] = types.ModuleType('test_module')
+    M['module'] = types.ModuleType('module')
+    M['package'] = types.ModuleType('package')
     M['package'].__path__ = [safepath('/package')]
     M['package'].__file__ = safepath('/package/__init__.py')
-    M['package.subpackage'] = imp.new_module('package.subpackage')
+    M['package.subpackage'] = types.ModuleType('package.subpackage')
     M['package'].subpackage = M['package.subpackage']
     M['package.subpackage'].__path__ = [safepath('/package/subpackage')]
     M['package.subpackage'].__file__ = safepath(
         '/package/subpackage/__init__.py')
-    M['test_module_with_generators'] = imp.new_module(
+    M['test_module_with_generators'] = types.ModuleType(
         'test_module_with_generators')
-    M['test_module_with_metaclass_tests'] = imp.new_module(
+    M['test_module_with_metaclass_tests'] = types.ModuleType(
         'test_module_with_metaclass_tests')
-    M['test_transplant'] = imp.new_module('test_transplant')
-    M['test_module_transplant_generator'] = imp.new_module(
+    M['test_transplant'] = types.ModuleType('test_transplant')
+    M['test_module_transplant_generator'] = types.ModuleType(
         'test_module_transplant_generator')
 
     # a unittest testcase subclass

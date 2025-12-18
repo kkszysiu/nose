@@ -1,4 +1,4 @@
-import imp
+import types
 import sys
 from nose.config import Config
 from nose import proxy
@@ -7,7 +7,7 @@ from nose.util import odict
 
 
 def mod(name):
-    m = imp.new_module(name)
+    m = types.ModuleType(name)
     sys.modules[name] = m
     return m
     

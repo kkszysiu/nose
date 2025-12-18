@@ -5,8 +5,13 @@ def __bootstrap__():
     dynamic libraries when installing.
     """
     import os
-    import imp
-    here = os.path.join(os.path.dirname(__file__))
-    imp.load_source(__name__, os.path.join(here, 'noname_wrapped.not_py'))
+    import importlib.util
+    import sys
+    here = os.path.dirname(__file__)
+    filepath = os.path.join(here, 'noname_wrapped.not_py')
+    spec = importlib.util.spec_from_file_location(__name__, filepath)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[__name__] = module
+    spec.loader.exec_module(module)
 
 __bootstrap__()

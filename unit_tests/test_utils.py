@@ -153,7 +153,7 @@ class TestUtils(unittest.TestCase):
 
     def test_try_run(self):
         try_run = util.try_run
-        import imp
+        import types
 
         def bar():
             pass
@@ -173,7 +173,7 @@ class TestUtils(unittest.TestCase):
             def method(self):
                 pass
 
-        foo = imp.new_module('foo')
+        foo = types.ModuleType('foo')
         foo.bar = bar
         foo.bar_m = bar_m
         foo.i_bar = Bar()

@@ -2,7 +2,7 @@ from nose.config import Config
 from nose import case
 from nose.suite import LazySuite, ContextSuite, ContextSuiteFactory, \
      ContextList
-import imp
+import types
 import sys
 import unittest
 
@@ -146,9 +146,9 @@ class TestContextSuite(unittest.TestCase):
         assert context.was_torndown
 
     def test_context_fixtures_for_ancestors(self):
-        top = imp.new_module('top')
-        top.bot = imp.new_module('top.bot')
-        top.bot.end = imp.new_module('top.bot.end')
+        top = types.ModuleType('top')
+        top.bot = types.ModuleType('top.bot')
+        top.bot.end = types.ModuleType('top.bot.end')
 
         sys.modules['top'] = top
         sys.modules['top.bot'] = top.bot
@@ -255,9 +255,9 @@ class TestContextSuite(unittest.TestCase):
 class TestContextSuiteFactory(unittest.TestCase):
             
     def test_ancestry(self):
-        top = imp.new_module('top')
-        top.bot = imp.new_module('top.bot')
-        top.bot.end = imp.new_module('top.bot.end')
+        top = types.ModuleType('top')
+        top.bot = types.ModuleType('top.bot')
+        top.bot.end = types.ModuleType('top.bot.end')
         
         sys.modules['top'] = top
         sys.modules['top.bot'] = top.bot
