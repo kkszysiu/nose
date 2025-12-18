@@ -260,6 +260,11 @@ class Importer:
             return os.path.dirname(filename)
 
     def sameModule(self, mod, filename):
+        if filename is None:
+            # New module is a builtin/frozen module
+            # It's the same only if old module is also a builtin (no __file__ and no __path__)
+            return not hasattr(mod, '__file__') and not hasattr(mod, '__path__')
+
         mod_paths = []
         if hasattr(mod, '__path__'):
             for path in mod.__path__:
