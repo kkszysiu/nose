@@ -48,7 +48,6 @@ class HtmlOutput(Plugin):
         else:
             self.html.append('OK')
         self.html.append('</div></body></html>')
-        # print >> sys.stderr, self.html
         for l in self.html:
             self.stream.writeln(l)
 

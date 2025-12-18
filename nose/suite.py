@@ -17,15 +17,6 @@ from nose.config import Config
 from nose.proxy import ResultProxyFactory
 from nose.util import isclass, resolve_name, try_run
 
-if sys.platform == 'cli':
-    if sys.version_info[:2] < (2, 6):
-        import clr
-        clr.AddReference("IronPython")
-        from IronPython.Runtime.Exceptions import StringException
-    else:
-        class StringException(Exception):
-            pass
-
 log = logging.getLogger(__name__)
 #log.setLevel(logging.DEBUG)
 
@@ -180,17 +171,8 @@ class ContextSuite(LazySuite):
         return sys.exc_info()
 
     def _exc_info(self):
-        """Bottleneck to fix up IronPython string exceptions
-        """
-        e = self.exc_info()
-        if sys.platform == 'cli':
-            if isinstance(e[0], StringException):
-                # IronPython throws these StringExceptions, but
-                # traceback checks type(etype) == str. Make a real
-                # string here.
-                e = (str(e[0]), e[1], e[2])
-
-        return e
+        """Return exception info."""
+        return self.exc_info()
 
     def run(self, result):
         """Run tests in suite inside of suite fixtures.

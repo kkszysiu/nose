@@ -217,7 +217,7 @@ def plugin_interface():
                   'IPluginInterface'])[0]
     doc = wikirst(intf.doc())
     methods = [ m for m in intf.routines() if not m.name.startswith('_') ]
-    methods.sort(lambda a, b: cmp(a.name, b.name))
+    methods.sort(key=lambda m: m.name)
     mdoc = []
     for m in methods:
         # FIXME fix the arg list so literal os.environ is not in there

@@ -109,20 +109,10 @@ def exc_message(exc_info):
     """Return the exception's message."""
     exc = exc_info[1]
     if exc is None:
-        # str exception
         result = exc_info[0]
     else:
-        try:
-            result = str(exc)
-        except UnicodeEncodeError:
-            try:
-                result = str(exc)
-            except UnicodeError:
-                # Fallback to args as neither str nor
-                # unicode(Exception(u'\xe6')) work in Python < 2.6
-                result = exc.args[0]
-    result = force_unicode(result, 'UTF-8')
-    return xml_safe(result)
+        result = str(exc)
+    return xml_safe(force_unicode(result, 'UTF-8'))
 
 class Tee(object):
     def __init__(self, encoding, *args):

@@ -1,12 +1,9 @@
 import os
-import sys
 import unittest
 from nose.plugins.attrib import AttributeSelector
 from nose.plugins import PluginTester
 
 support = os.path.join(os.path.dirname(__file__), 'support')
-
-compat_24 = sys.version_info >= (2, 4)
 
 class AttributePluginTester(PluginTester, unittest.TestCase):
     plugins = [AttributeSelector()]
@@ -180,20 +177,19 @@ class TestStaticMethod(AttributePluginTester):
         assert 'Ran 1 test' in self.output
 
 
-if compat_24:
-    class TestAttributeEval(AttributePluginTester):
-        args = ["-A", "c>20"]
+class TestAttributeEval(AttributePluginTester):
+    args = ["-A", "c>20"]
 
-        def verify(self):
-            assert 'test_attr.test_one ... ok' not in self.output
-            assert 'test_attr.test_two ... ok' not in self.output
-            assert 'test_attr.test_three ... ok' not in self.output
-            assert 'TestClass.test_class_one ... ok' not in self.output
-            assert 'TestClass.test_class_two ... ok' not in self.output
-            assert 'TestClass.test_class_three ... ok' not in self.output
-            assert 'test_case_two' in self.output
-            assert 'test_case_one' not in self.output
-            assert 'test_case_three' not in self.output
+    def verify(self):
+        assert 'test_attr.test_one ... ok' not in self.output
+        assert 'test_attr.test_two ... ok' not in self.output
+        assert 'test_attr.test_three ... ok' not in self.output
+        assert 'TestClass.test_class_one ... ok' not in self.output
+        assert 'TestClass.test_class_two ... ok' not in self.output
+        assert 'TestClass.test_class_three ... ok' not in self.output
+        assert 'test_case_two' in self.output
+        assert 'test_case_one' not in self.output
+        assert 'test_case_three' not in self.output
 
 
 # Avoid trying to run base class as tests

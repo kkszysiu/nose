@@ -109,7 +109,6 @@ from nose.plugins.base import Plugin
 from nose.util import tolist
 
 log = logging.getLogger('nose.plugins.attrib')
-compat_24 = sys.version_info >= (2, 4)
 
 def attr(*args, **kwargs):
     """Decorator that adds attributes to classes or functions
@@ -165,14 +164,12 @@ class AttributeSelector(Plugin):
                           metavar="ATTR",
                           help="Run only tests that have attributes "
                           "specified by ATTR [NOSE_ATTR]")
-        # disable in < 2.4: eval can't take needed args
-        if compat_24:
-            parser.add_option("-A", "--eval-attr",
-                              dest="eval_attr", metavar="EXPR", action="append",
-                              default=env.get('NOSE_EVAL_ATTR'),
-                              help="Run only tests for whose attributes "
-                              "the Python expression EXPR evaluates "
-                              "to True [NOSE_EVAL_ATTR]")
+        parser.add_option("-A", "--eval-attr",
+                          dest="eval_attr", metavar="EXPR", action="append",
+                          default=env.get('NOSE_EVAL_ATTR'),
+                          help="Run only tests for whose attributes "
+                          "the Python expression EXPR evaluates "
+                          "to True [NOSE_EVAL_ATTR]")
 
     def configure(self, options, config):
         """Configure the plugin and system, based on selected options.
@@ -186,7 +183,7 @@ class AttributeSelector(Plugin):
         self.attribs = []
 
         # handle python eval-expression parameter
-        if compat_24 and options.eval_attr:
+        if options.eval_attr:
             eval_attr = tolist(options.eval_attr)
             for attr in eval_attr:
                 # "<python expression>"

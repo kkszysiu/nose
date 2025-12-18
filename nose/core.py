@@ -18,7 +18,6 @@ from nose.util import isclass, tolist
 
 
 log = logging.getLogger('nose.core')
-compat_24 = sys.version_info >= (2, 4)
 
 __all__ = ['TestProgram', 'main', 'run', 'run_exit', 'runmodule', 'collector',
            'TextTestRunner']
@@ -111,14 +110,10 @@ class TestProgram(unittest.TestProgram):
         self.config = config
         self.suite = suite
         self.exit = exit
-        extra_args = {}
-        version = sys.version_info[0:2]
-        if version >= (2,7) and version != (3,0):
-            extra_args['exit'] = exit
         unittest.TestProgram.__init__(
             self, module=module, defaultTest=defaultTest,
             argv=argv, testRunner=testRunner, testLoader=testLoader,
-            **extra_args)
+            exit=exit)
 
     def getAllConfigFiles(self, env=None):
         env = env or {}

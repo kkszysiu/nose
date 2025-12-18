@@ -1,4 +1,4 @@
-# Module doctest.
+ # Module doctest.
 # Released to the public domain 16-Jan-2001, by Tim Peters (tim@python.org).
 # Major enhancements and refactoring by:
 #     Jim Fulton
@@ -478,11 +478,17 @@ class DocTest:
 
 
     # This lets us sort tests by name:
-    def __cmp__(self, other):
+    def __lt__(self, other):
         if not isinstance(other, DocTest):
-            return -1
-        return cmp((self.name, self.filename, self.lineno, id(self)),
-                   (other.name, other.filename, other.lineno, id(other)))
+            return NotImplemented
+        return ((self.name, self.filename, self.lineno, id(self)) <
+                (other.name, other.filename, other.lineno, id(other)))
+
+    def __eq__(self, other):
+        if not isinstance(other, DocTest):
+            return NotImplemented
+        return ((self.name, self.filename, self.lineno, id(self)) ==
+                (other.name, other.filename, other.lineno, id(other)))
 
 ######################################################################
 ## 3. DocTestParser
@@ -1891,16 +1897,16 @@ class Tester:
         return (f,t)
 
     def rundict(self, d, name, module=None):
-        import new
-        m = new.module(name)
+        import types
+        m = types.ModuleType(name)
         m.__dict__.update(d)
         if module is None:
             module = False
         return self.rundoc(m, name, module)
 
     def run__test__(self, d, name):
-        import new
-        m = new.module(name)
+        import types
+        m = types.ModuleType(name)
         m.__test__ = d
         return self.rundoc(m, name)
 

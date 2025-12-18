@@ -7,11 +7,7 @@ import re
 import sys
 import textwrap
 import tokenize
-
-try:
-    from io import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 
 log = logging.getLogger(__name__)
 
@@ -93,10 +89,9 @@ def tbsource(tb, context=6):
             start = max(0, min(start, len(lines) - context))
             lines = lines[start:start+context]
             index = lineno - 1 - start
-            
-            # python 2.5 compat: if previous line ends in a continuation,
-            # decrement start by 1 to match 2.4 behavior                
-            if sys.version_info >= (2, 5) and index > 0:
+
+            # If previous line ends in a continuation, decrement start by 1
+            if index > 0:
                 while lines[index-1].strip().endswith('\\'):
                     start -= 1
                     lines = all_lines[start:start+context]

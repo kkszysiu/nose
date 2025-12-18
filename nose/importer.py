@@ -9,125 +9,154 @@ import os
 import sys
 from nose.config import Config
 
-if sys.version_info[:2] < (3, 4):
-    from imp import find_module, load_module, acquire_lock, release_lock
-else:
-    #########################################################################
-    # Begin compat code to adapt `imp` loader to `importlib`
-    #########################################################################
+import importlib
+import importlib.machinery
+import importlib.util
+import tokenize
+from threading import RLock
 
-    from _imp import acquire_lock, is_builtin, init_frozen, is_frozen, release_lock
-    from importlib._bootstrap import _ERR_MSG, _builtin_from_name
-    import importlib.machinery
-    import importlib.util
-    import tokenize
-    # DEPRECATED
-    SEARCH_ERROR = 0
-    PY_SOURCE = 1
-    PY_COMPILED = 2
-    C_EXTENSION = 3
-    PY_RESOURCE = 4
-    PKG_DIRECTORY = 5
-    C_BUILTIN = 6
-    PY_FROZEN = 7
-    PY_CODERESOURCE = 8
-    IMP_HOOK = 9
+# Thread lock for import operations
+_import_lock = RLock()
 
-    ### Helpers ###
 
-    def get_suffixes():
-        extensions = [(s, 'rb', C_EXTENSION) for s in importlib.machinery.EXTENSION_SUFFIXES]
-        source = [(s, 'r', PY_SOURCE) for s in importlib.machinery.SOURCE_SUFFIXES]
-        bytecode = [(s, 'rb', PY_COMPILED) for s in importlib.machinery.BYTECODE_SUFFIXES]
-        return extensions + source + bytecode
+def acquire_lock():
+    """Acquire the import lock."""
+    _import_lock.acquire()
 
-    def load_package(name, path):
-        if os.path.isdir(path):
-            extensions = (importlib.machinery.SOURCE_SUFFIXES[:] +
-                          importlib.machinery.BYTECODE_SUFFIXES[:])
-            for extension in extensions:
-                init_path = os.path.join(path, '__init__' + extension)
-                if os.path.exists(init_path):
-                    path = init_path
-                    break
-            else:
-                raise ValueError(f'{path!r} is not a package')
-        spec = importlib.util.spec_from_file_location(name, path,
-                                                      submodule_search_locations=[])
-        sys.modules[name] = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(sys.modules[name])
-        return sys.modules[name]
 
-    def init_builtin(name):
-        try:
-            return _builtin_from_name(name)
-        except ImportError:
-            return None
+def release_lock():
+    """Release the import lock."""
+    _import_lock.release()
 
-    ### Primary functions ###
 
-    def find_module(name, path=None):
-        """
-        Search for a module.
+# Module type constants
+SEARCH_ERROR = 0
+PY_SOURCE = 1
+PY_COMPILED = 2
+C_EXTENSION = 3
+PY_RESOURCE = 4
+PKG_DIRECTORY = 5
+C_BUILTIN = 6
+PY_FROZEN = 7
+PY_CODERESOURCE = 8
+IMP_HOOK = 9
 
-        If path is omitted or None, search for a built-in, frozen or special
-        module and continue search in sys.path. The module name cannot
-        contain '.'; to search for a submodule of a package, pass the
-        submodule name and the package's __path__.
-        """
-        if is_builtin(name):
-            return None, None, ('', '', C_BUILTIN)
-        elif is_frozen(name):
-            return None, None, ('', '', PY_FROZEN)
 
-        # find_spec(fullname, path=None, target=None)
-        spec = importlib.machinery.PathFinder().find_spec(fullname=name, path=path)
-        if spec is None:
-            raise ImportError(_ERR_MSG.format(name), name=name)
+def get_suffixes():
+    extensions = [(s, 'rb', C_EXTENSION) for s in importlib.machinery.EXTENSION_SUFFIXES]
+    source = [(s, 'r', PY_SOURCE) for s in importlib.machinery.SOURCE_SUFFIXES]
+    bytecode = [(s, 'rb', PY_COMPILED) for s in importlib.machinery.BYTECODE_SUFFIXES]
+    return extensions + source + bytecode
 
-        # RETURN (file, file_path, desc=(suffix, mode, type_))
-        if os.path.splitext(os.path.basename(spec.origin))[0] == '__init__':
-            return None, os.path.dirname(spec.origin), ('', '', PKG_DIRECTORY)
-        for suffix, mode, type_ in get_suffixes():
-            if spec.origin.endswith(suffix):
+
+def load_package(name, path):
+    if os.path.isdir(path):
+        extensions = (importlib.machinery.SOURCE_SUFFIXES[:] +
+                      importlib.machinery.BYTECODE_SUFFIXES[:])
+        for extension in extensions:
+            init_path = os.path.join(path, '__init__' + extension)
+            if os.path.exists(init_path):
+                path = init_path
                 break
         else:
-            suffix = '.py'
-            mode = 'r'
-            type_ = PY_SOURCE
+            raise ValueError(f'{path!r} is not a package')
+    spec = importlib.util.spec_from_file_location(name, path,
+                                                  submodule_search_locations=[])
+    sys.modules[name] = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sys.modules[name])
+    return sys.modules[name]
 
-        encoding = None
-        if 'b' not in mode:
-            with open(spec.origin, 'rb') as file:
-                encoding = tokenize.detect_encoding(file.readline)[0]
-        file = open(spec.origin, mode, encoding=encoding)
-        return file, spec.origin, (suffix, mode, type_)
 
-    def load_module(name, file, filename, details):
-        """
-        Load a module, given information returned by find_module().
+def init_builtin(name):
+    """Import a built-in module by name."""
+    if name in sys.builtin_module_names:
+        return importlib.import_module(name)
+    return None
 
-        The module name must include the full package name, if any.
-        """
-        suffix, mode, type_ = details
-        if type_ == PKG_DIRECTORY:
-            return load_package(name, filename)
-        elif type_ == C_BUILTIN:
-            return init_builtin(name)
-        elif type_ == PY_FROZEN:
-            return init_frozen(name)
-        # TODO: PY_COMPILED, C_EXTENSION
 
-        # PY_SOURCE
-        spec = importlib.util.spec_from_file_location(name, filename)
-        mod = importlib.util.module_from_spec(spec)
-        sys.modules[name] = mod
-        spec.loader.exec_module(mod)
-        return mod
+def is_builtin(name):
+    """Check if a module is a built-in module."""
+    return name in sys.builtin_module_names
 
-    #########################################################################
-    # End `imp` compat code
-    #########################################################################
+
+def is_frozen(name):
+    """Check if a module is a frozen module."""
+    # In Python 3.11+, we can check the frozen modules
+    try:
+        spec = importlib.util.find_spec(name)
+        if spec and spec.origin == 'frozen':
+            return True
+    except (ImportError, ModuleNotFoundError, ValueError):
+        pass
+    return False
+
+
+def init_frozen(name):
+    """Import a frozen module by name."""
+    return importlib.import_module(name)
+
+
+def find_module(name, path=None):
+    """
+    Search for a module.
+
+    If path is omitted or None, search for a built-in, frozen or special
+    module and continue search in sys.path. The module name cannot
+    contain '.'; to search for a submodule of a package, pass the
+    submodule name and the package's __path__.
+    """
+    if is_builtin(name):
+        return None, None, ('', '', C_BUILTIN)
+    elif is_frozen(name):
+        return None, None, ('', '', PY_FROZEN)
+
+    spec = importlib.machinery.PathFinder.find_spec(name, path)
+    if spec is None:
+        raise ImportError(f"No module named {name!r}", name=name)
+
+    # RETURN (file, file_path, desc=(suffix, mode, type_))
+    if spec.origin and os.path.splitext(os.path.basename(spec.origin))[0] == '__init__':
+        return None, os.path.dirname(spec.origin), ('', '', PKG_DIRECTORY)
+
+    if spec.origin is None:
+        raise ImportError(f"No module named {name!r}", name=name)
+
+    for suffix, mode, type_ in get_suffixes():
+        if spec.origin.endswith(suffix):
+            break
+    else:
+        suffix = '.py'
+        mode = 'r'
+        type_ = PY_SOURCE
+
+    encoding = None
+    if 'b' not in mode:
+        with open(spec.origin, 'rb') as file:
+            encoding = tokenize.detect_encoding(file.readline)[0]
+    file = open(spec.origin, mode, encoding=encoding)
+    return file, spec.origin, (suffix, mode, type_)
+
+
+def load_module(name, file, filename, details):
+    """
+    Load a module, given information returned by find_module().
+
+    The module name must include the full package name, if any.
+    """
+    suffix, mode, type_ = details
+    if type_ == PKG_DIRECTORY:
+        return load_package(name, filename)
+    elif type_ == C_BUILTIN:
+        return init_builtin(name)
+    elif type_ == PY_FROZEN:
+        return init_frozen(name)
+
+    # PY_SOURCE
+    spec = importlib.util.spec_from_file_location(name, filename)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
 
 log = logging.getLogger(__name__)
 
