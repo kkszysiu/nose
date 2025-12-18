@@ -375,10 +375,11 @@ class EntryPointPluginManager(PluginManager):
     def loadPlugins(self):
         """Load plugins by iterating the `nose.plugins` entry point.
         """
-        from pkg_resources import iter_entry_points
+        from importlib.metadata import entry_points
         loaded = {}
         for entry_point, adapt in self.entry_points:
-            for ep in iter_entry_points(entry_point):
+            eps = entry_points(group=entry_point)
+            for ep in eps:
                 if ep.name in loaded:
                     continue
                 loaded[ep.name] = True
@@ -414,14 +415,8 @@ class BuiltinPluginManager(PluginManager):
             self.addPlugin(plug())
         super(BuiltinPluginManager, self).loadPlugins()
 
-try:
-    import pkg_resources
-    class DefaultPluginManager(BuiltinPluginManager, EntryPointPluginManager):
-        pass
-
-except ImportError:
-    class DefaultPluginManager(BuiltinPluginManager):
-        pass
+class DefaultPluginManager(BuiltinPluginManager, EntryPointPluginManager):
+    pass
 
 class RestrictedPluginManager(DefaultPluginManager):
     """Plugin manager that restricts the plugin list to those not
