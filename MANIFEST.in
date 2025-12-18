@@ -4,11 +4,8 @@ include NEWS
 include README.txt
 include lgpl.txt
 include nosetests.1
-include install-rpm.sh
-include bin/nosetests
-include distribute_setup.py
+include pyproject.toml
 include selftest.py
-include setup3lib.py
 include patch.py
 include nose/usage.txt
 graft doc
@@ -16,3 +13,5 @@ graft examples
 graft unit_tests
 graft functional_tests
 prune doc/.build
+global-exclude __pycache__
+global-exclude *.py[cod]
